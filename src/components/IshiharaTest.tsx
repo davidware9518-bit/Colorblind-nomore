@@ -1,97 +1,236 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 
-export type Plate = {
+// Seeded random for consistent plate rendering
+function createRandom(seed: number) {
+  let s = seed;
+  return function () {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+export type PlateType = "control" | "transformation" | "vanishing" | "tritan";
+
+export type PlateConfig = {
   id: number;
   number: string;
-  type: "control" | "transformation" | "vanishing" | "tritan";
+  altNumber?: string; // What colorblind people might see
+  type: PlateType;
   description: string;
   colors: {
     bg: string[];
     fg: string[];
+    alt?: string[]; // Colors for the "alt" number or confusable parts
   };
 };
 
-export const PLATES: Plate[] = [
-  { 
-    id: 1, number: "12", type: "control", description: "Visible to everyone",
-    colors: { bg: ["#81C784", "#4CAF50", "#2E7D32"], fg: ["#E57373", "#F44336", "#C62828"] }
+export const PLATES: PlateConfig[] = [
+  {
+    id: 1,
+    number: "12",
+    type: "control",
+    description: "Everyone should see 12",
+    colors: {
+      bg: ["#7FB069", "#94C973", "#5D8A4C", "#A8D5BA"],
+      fg: ["#E74C3C", "#C0392B", "#D35400", "#E67E22"]
+    }
   },
-  { 
-    id: 2, number: "74", type: "control", description: "Visible to everyone",
-    colors: { bg: ["#64B5F6", "#2196F3", "#1565C0"], fg: ["#FFD54F", "#FFC107", "#FF8F00"] }
+  {
+    id: 2,
+    number: "74",
+    type: "control",
+    description: "Everyone should see 74",
+    colors: {
+      bg: ["#5DADE2", "#3498DB", "#2E86C1", "#85C1E9"],
+      fg: ["#F4D03F", "#F1C40F", "#D4AC0D", "#B7950B"]
+    }
   },
-  { 
-    id: 3, number: "8", type: "transformation", description: "Normal see 8, Red-Green see 3",
-    colors: { bg: ["#AED581", "#8BC34A", "#558B2F"], fg: ["#FFB74D", "#FF9800", "#EF6C00"] }
+  {
+    id: 3,
+    number: "8",
+    altNumber: "3",
+    type: "transformation",
+    description: "Normal sees 8, Red-Green sees 3",
+    colors: {
+      bg: ["#27AE60", "#2ECC71", "#1E8449", "#52BE80"],
+      fg: ["#E67E22", "#D35400", "#F39C12"], // The '3' part
+      alt: ["#45B39D", "#16A085", "#1ABC9C"] // The extra parts of '8' that look like BG to RG-blind
+    }
   },
-  { 
-    id: 4, number: "29", type: "transformation", description: "Normal see 29, Red-Green see 70",
-    colors: { bg: ["#A1887F", "#795548", "#4E342E"], fg: ["#9575CD", "#673AB7", "#4527A0"] }
+  {
+    id: 4,
+    number: "29",
+    altNumber: "70",
+    type: "transformation",
+    description: "Normal sees 29, Red-Green sees 70",
+    colors: {
+      bg: ["#8D6E63", "#795548", "#6D4C41", "#5D4037"],
+      fg: ["#EC407A", "#D81B60", "#AD1457"], // The '70' part? Wait, 29->70 means they see 70.
+      alt: ["#7E57C2", "#5E35B1", "#4527A0"] // The parts that make 29 look like 29 to normal
+    }
   },
-  { 
-    id: 5, number: "5", type: "transformation", description: "Normal see 5, Red-Green see 2",
-    colors: { bg: ["#DCE775", "#CDDC39", "#9E9D24"], fg: ["#BA68C8", "#9C27B0", "#7B1FA2"] }
+  {
+    id: 5,
+    number: "5",
+    altNumber: "2",
+    type: "transformation",
+    description: "Normal sees 5, Red-Green sees 2",
+    colors: {
+      bg: ["#CDDC39", "#D4E157", "#C0CA33", "#AFB42B"],
+      fg: ["#8E44AD", "#9B59B6", "#7D3C98"], // The '2' part
+      alt: ["#FBC02D", "#F9A825", "#F57F17"] // The parts that make 5 look like 5
+    }
   },
-  { 
-    id: 6, number: "3", type: "transformation", description: "Normal see 3, Red-Green see 5",
-    colors: { bg: ["#4DB6AC", "#009688", "#00695C"], fg: ["#FF8A65", "#FF5722", "#D84315"] }
+  {
+    id: 6,
+    number: "3",
+    altNumber: "5",
+    type: "transformation",
+    description: "Normal sees 3, Red-Green sees 5",
+    colors: {
+      bg: ["#1ABC9C", "#16A085", "#48C9B0", "#76D7C4"],
+      fg: ["#FF5722", "#E64A19", "#D84315"], // The '5' part
+      alt: ["#2ECC71", "#27AE60", "#239B56"] // The parts that make 3 look like 3
+    }
   },
-  { 
-    id: 7, number: "15", type: "vanishing", description: "Normal see 15, Red-Green see nothing",
-    colors: { bg: ["#81C784", "#4CAF50", "#388E3C"], fg: ["#8D6E63", "#6D4C41", "#4E342E"] }
+  {
+    id: 7,
+    number: "15",
+    type: "vanishing",
+    description: "Normal sees 15, Red-Green sees nothing",
+    colors: {
+      bg: ["#27AE60", "#2ECC71", "#1E8449", "#52BE80"],
+      fg: ["#795548", "#8D6E63", "#6D4C41"] // Confusable with green for RG-blind
+    }
   },
-  { 
-    id: 8, number: "42", type: "vanishing", description: "Normal see 42, Red-Green see nothing",
-    colors: { bg: ["#FFF176", "#FFEB3B", "#FBC02D"], fg: ["#81C784", "#4CAF50", "#2E7D32"] }
+  {
+    id: 8,
+    number: "6",
+    type: "tritan",
+    description: "Normal sees 6, Tritan sees nothing",
+    colors: {
+      bg: ["#3498DB", "#5DADE2", "#2E86C1", "#85C1E9"],
+      fg: ["#1ABC9C", "#16A085", "#48C9B0"] // Blue-Green confusion for Tritan
+    }
   },
-  { 
-    id: 9, number: "6", type: "tritan", description: "Normal see 6, Tritan see nothing",
-    colors: { bg: ["#4FC3F7", "#03A9F4", "#0288D1"], fg: ["#B2DFDB", "#80CBC4", "#4DB6AC"] }
+  {
+    id: 9,
+    number: "9",
+    type: "tritan",
+    description: "Normal sees 9, Tritan sees nothing",
+    colors: {
+      bg: ["#9B59B6", "#8E44AD", "#A569BD", "#BB8FCE"],
+      fg: ["#F06292", "#EC407A", "#E91E63"] // Purple-Pink confusion for Tritan
+    }
   },
-  { 
-    id: 10, number: "9", type: "tritan", description: "Normal see 9, Tritan see nothing",
-    colors: { bg: ["#9575CD", "#673AB7", "#512DA8"], fg: ["#E1BEE7", "#CE93D8", "#BA68C8"] }
-  },
+  {
+    id: 10,
+    number: "42",
+    type: "vanishing",
+    description: "Normal sees 42, Red-Green sees nothing",
+    colors: {
+      bg: ["#F1C40F", "#F4D03F", "#D4AC0D", "#B7950B"],
+      fg: ["#2ECC71", "#27AE60", "#1E8449"] // Yellow-Green confusion
+    }
+  }
 ];
 
-export function IshiharaPlate({ plate }: { plate: Plate }) {
-  const dots = useMemo(() => {
-    const d = [];
-    for (let i = 0; i < 400; i++) {
-      d.push({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: 1 + Math.random() * 3,
-        color: plate.colors.bg[Math.floor(Math.random() * plate.colors.bg.length)],
-      });
+type Dot = {
+  x: number;
+  y: number;
+  r: number;
+  color: string;
+};
+
+export function IshiharaPlate({ plate }: { plate: PlateConfig }) {
+  const [dots, setDots] = useState<Dot[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Helper to check if a point is in a number
+    const checkMask = (num: string, x: number, y: number) => {
+      ctx.clearRect(0, 0, 100, 100);
+      ctx.fillStyle = "black";
+      ctx.font = "bold 65px serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(num, 50, 52); // Slight offset for better centering
+      const data = ctx.getImageData(x, y, 1, 1).data;
+      return data[3] > 128;
+    };
+
+    const rng = createRandom(plate.id * 1000);
+    const newDots: Dot[] = [];
+    const maxAttempts = 5000;
+    const targetDots = 1200;
+
+    for (let i = 0; i < maxAttempts && newDots.length < targetDots; i++) {
+      const x = rng() * 100;
+      const y = rng() * 100;
+      const r = 1.0 + rng() * 2.5; // Radius 1.0 to 3.5 (Diameter 2 to 7)
+
+      // Keep within the plate circle
+      const dist = Math.sqrt((x - 50) ** 2 + (y - 50) ** 2);
+      if (dist > 47) continue;
+
+      // Collision detection
+      let collision = false;
+      for (const d of newDots) {
+        const dDist = Math.sqrt((x - d.x) ** 2 + (y - d.y) ** 2);
+        if (dDist < (r + d.r) * 0.95) {
+          collision = true;
+          break;
+        }
+      }
+      if (collision) continue;
+
+      // Determine color
+      let colorList = plate.colors.bg;
+      
+      const isInPrimary = checkMask(plate.number, x, y);
+      const isInAlt = plate.altNumber ? checkMask(plate.altNumber, x, y) : false;
+
+      if (plate.type === "transformation" && plate.altNumber) {
+        if (isInAlt) {
+          colorList = plate.colors.fg; // Part seen by both (or just colorblind)
+        } else if (isInPrimary) {
+          colorList = plate.colors.alt || plate.colors.fg; // Part seen only by normal
+        }
+      } else {
+        if (isInPrimary) {
+          colorList = plate.colors.fg;
+        }
+      }
+
+      const color = colorList[Math.floor(rng() * colorList.length)];
+      newDots.push({ x, y, r, color });
     }
-    return d;
+
+    setDots(newDots);
   }, [plate]);
 
   return (
-    <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto bg-gray-100 rounded-full overflow-hidden shadow-inner border-8 border-white">
-      <svg viewBox="0 0 100 100" className="w-full h-full">
-        {dots.map((dot) => (
-          <circle key={dot.id} cx={dot.x} cy={dot.y} r={dot.size} fill={dot.color} opacity="0.8" />
-        ))}
-        <mask id={`mask-${plate.id}`}>
-           <text x="50" y="50" textAnchor="middle" dominantBaseline="central" fontSize="40" fontWeight="900" fill="white" style={{ fontFamily: "serif" }}>
-            {plate.number}
-           </text>
-        </mask>
-        <g mask={`url(#mask-${plate.id})`}>
-          {Array.from({ length: 180 }).map((_, i) => (
-            <circle 
-              key={`fg-${i}`} 
-              cx={Math.random() * 100} 
-              cy={Math.random() * 100} 
-              r={1 + Math.random() * 2.5} 
-              fill={plate.colors.fg[Math.floor(Math.random() * plate.colors.fg.length)]} 
+    <div className="relative w-72 h-72 md:w-96 md:h-96 mx-auto bg-white rounded-full p-2 shadow-2xl border-8 border-gray-100 flex items-center justify-center">
+      <div className="w-full h-full rounded-full overflow-hidden bg-gray-50 relative">
+        <svg viewBox="0 0 100 100" className="w-full h-full">
+          {dots.map((dot, i) => (
+            <circle
+              key={i}
+              cx={dot.x}
+              cy={dot.y}
+              r={dot.r}
+              fill={dot.color}
+              className="transition-colors duration-500"
             />
           ))}
-        </g>
-      </svg>
+        </svg>
+      </div>
     </div>
   );
 }
@@ -113,26 +252,37 @@ export function IshiharaTest({ onComplete }: { onComplete: (result: string) => v
   };
 
   const calculateResult = (finalAnswers: string[]) => {
-    let rgScore = 0;
-    let tritanScore = 0;
-    let controlPassed = true;
+    let rgAltHits = 0;
+    let vanishingMisses = 0;
+    let tritanMisses = 0;
+    let controlErrors = 0;
 
     PLATES.forEach((plate, i) => {
       const answer = finalAnswers[i]?.trim();
       const isCorrect = answer === plate.number;
+      const isAlt = plate.altNumber && answer === plate.altNumber;
 
-      if (plate.type === "control" && !isCorrect) controlPassed = false;
-      if (plate.type === "transformation" && !isCorrect) rgScore++;
-      if (plate.type === "vanishing" && (answer === "" || answer === "nothing" || !isCorrect)) rgScore++;
-      if (plate.type === "tritan" && (answer === "" || answer === "nothing" || !isCorrect)) tritanScore++;
+      if (plate.type === "control") {
+        if (!isCorrect) controlErrors++;
+      } else if (plate.type === "transformation") {
+        if (isAlt) rgAltHits++;
+      } else if (plate.type === "vanishing") {
+        if (answer === "" || answer.toLowerCase() === "nothing" || (!isCorrect && !isAlt)) {
+          vanishingMisses++;
+        }
+      } else if (plate.type === "tritan") {
+        if (answer === "" || answer.toLowerCase() === "nothing" || !isCorrect) {
+          tritanMisses++;
+        }
+      }
     });
 
     let result = "Normal Vision";
-    if (!controlPassed) {
-      result = "Inconclusive";
-    } else if (rgScore >= 3) {
+    if (controlErrors >= 1) {
+      result = "Inconclusive (Reliability low)";
+    } else if (rgAltHits >= 3 || (rgAltHits >= 1 && vanishingMisses >= 1)) {
       result = "Red-Green Color Vision Deficiency (Protan/Deutan)";
-    } else if (tritanScore >= 1) {
+    } else if (tritanMisses >= 1) {
       result = "Blue-Yellow Color Vision Deficiency (Tritan)";
     }
 
@@ -142,47 +292,49 @@ export function IshiharaTest({ onComplete }: { onComplete: (result: string) => v
   const currentPlate = PLATES[step];
 
   return (
-    <div className="space-y-8 animate-in fade-in zoom-in duration-500">
-      <div className="text-center space-y-2">
-        <h2 className="text-3xl font-black text-gray-900 leading-tight">Vision Screening</h2>
-        <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Plate {step + 1} of {PLATES.length}</p>
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="text-center space-y-3">
+        <h2 className="text-4xl font-black text-gray-900 tracking-tight leading-none italic">Vision Screening</h2>
+        <p className="text-indigo-600 font-black uppercase tracking-[0.2em] text-xs">Plate {step + 1} of {PLATES.length}</p>
       </div>
 
       <IshiharaPlate plate={currentPlate} />
 
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <label className="text-sm font-black text-gray-700 uppercase tracking-widest block text-center">What number do you see?</label>
+      <div className="max-w-md mx-auto space-y-8">
+        <div className="space-y-4">
+          <label className="text-xs font-black text-gray-400 uppercase tracking-widest block text-center">What number is hidden in the dots?</label>
           <input 
             type="text" 
             value={inputValue}
             onChange={(e) => setRawInputValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleNext()}
             autoFocus
-            placeholder="Type number here..."
-            className="w-full p-6 bg-gray-50 rounded-2xl border-4 border-transparent focus:border-indigo-600 outline-none text-2xl font-black text-center transition-all"
+            placeholder="Type number..."
+            className="w-full p-8 bg-gray-50 rounded-[2rem] border-4 border-transparent focus:border-indigo-600 outline-none text-4xl font-black text-center transition-all shadow-inner placeholder:text-gray-200"
           />
         </div>
         
         <div className="flex gap-4">
           <button 
             onClick={() => { setRawInputValue("nothing"); handleNext(); }}
-            className="flex-1 py-5 bg-gray-100 text-gray-500 font-black rounded-2xl hover:bg-gray-200 transition-all uppercase tracking-widest text-xs"
+            className="flex-1 py-6 bg-white border-4 border-gray-100 text-gray-400 font-black rounded-2xl hover:border-indigo-100 hover:text-indigo-600 transition-all uppercase tracking-widest text-xs"
           >
             I see nothing
           </button>
           <button 
             onClick={handleNext}
-            className="flex-[2] py-5 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-lg transition-all uppercase tracking-widest"
+            className="flex-[2] py-6 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-2xl transition-all uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-[0.98]"
           >
             Next Plate →
           </button>
         </div>
       </div>
 
-      <p className="text-[10px] text-gray-300 font-medium text-center uppercase tracking-widest italic">
-        Tip: If you see two numbers, type the first one that appears most clearly.
-      </p>
+      <div className="bg-amber-50 p-6 rounded-3xl border border-amber-100">
+        <p className="text-[11px] text-amber-700 font-bold text-center leading-relaxed">
+          Tip: Look at the plate from a slight distance. If you see two numbers, type the one that stands out the most.
+        </p>
+      </div>
     </div>
   );
 }

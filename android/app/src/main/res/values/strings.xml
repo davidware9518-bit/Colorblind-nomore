@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">TruHue</string>
-    <string name="title_activity_main">TruHue</string>
-    <string name="package_name">com.truhue.app</string>
-    <string name="custom_url_scheme">com.truhue.app</string>
+    <string name="app_name">ObviStyle</string>
+    <string name="title_activity_main">ObviStyle</string>
+    <string name="package_name">com.obvistyle.app</string>
+    <string name="custom_url_scheme">com.obvistyle.app</string>
 </resources>

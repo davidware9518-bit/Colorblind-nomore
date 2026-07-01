@@ -1,9 +1,14 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.truhue.app',
-  appName: 'ClosetClarity',
-  webDir: 'dist/client'
+  appId: 'com.obvistyle.app',
+  appName: 'ObviStyle',
+  webDir: 'dist/capacitor',
+  plugins: {
+    Camera: {
+      permissions: ['camera', 'photos']
+    }
+  }
 };
 
 export default config;

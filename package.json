@@ -8,6 +8,7 @@
     "build": "vite build",
     "start": "bun run serve.ts",
     "publish": "bash ./publish.sh",
+    "build:cap": "vite build --config vite.capacitor.config.ts",
     "format": "prettier --write ."
   },
   "dependencies": {
