@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WardrobeRouteImport } from './routes/wardrobe'
+import { Route as TestRouteImport } from './routes/test'
 import { Route as RecommendationsRouteImport } from './routes/recommendations'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -24,6 +25,11 @@ import { Route as QuizResultRouteImport } from './routes/quiz/result'
 const WardrobeRoute = WardrobeRouteImport.update({
   id: '/wardrobe',
   path: '/wardrobe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestRoute = TestRouteImport.update({
+  id: '/test',
+  path: '/test',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecommendationsRoute = RecommendationsRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRouteWithChildren
   '/recommendations': typeof RecommendationsRoute
+  '/test': typeof TestRoute
   '/wardrobe': typeof WardrobeRoute
   '/quiz/result': typeof QuizResultRoute
 }
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRouteWithChildren
   '/recommendations': typeof RecommendationsRoute
+  '/test': typeof TestRoute
   '/wardrobe': typeof WardrobeRoute
   '/quiz/result': typeof QuizResultRoute
 }
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRouteWithChildren
   '/recommendations': typeof RecommendationsRoute
+  '/test': typeof TestRoute
   '/wardrobe': typeof WardrobeRoute
   '/quiz/result': typeof QuizResultRoute
 }
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/quiz'
     | '/recommendations'
+    | '/test'
     | '/wardrobe'
     | '/quiz/result'
   fileRoutesByTo: FileRoutesByTo
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/quiz'
     | '/recommendations'
+    | '/test'
     | '/wardrobe'
     | '/quiz/result'
   id:
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/quiz'
     | '/recommendations'
+    | '/test'
     | '/wardrobe'
     | '/quiz/result'
   fileRoutesById: FileRoutesById
@@ -169,6 +181,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRouteWithChildren
   RecommendationsRoute: typeof RecommendationsRoute
+  TestRoute: typeof TestRoute
   WardrobeRoute: typeof WardrobeRoute
 }
 
@@ -179,6 +192,13 @@ declare module '@tanstack/react-router' {
       path: '/wardrobe'
       fullPath: '/wardrobe'
       preLoaderRoute: typeof WardrobeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recommendations': {
@@ -274,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRouteWithChildren,
   RecommendationsRoute: RecommendationsRoute,
+  TestRoute: TestRoute,
   WardrobeRoute: WardrobeRoute,
 }
 export const routeTree = rootRouteImport

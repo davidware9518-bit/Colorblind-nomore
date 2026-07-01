@@ -24,7 +24,7 @@ function WardrobeGaps() {
   const [wardrobe, setWardrobe] = useState<WardrobeItem[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("truhue_wardrobe");
+    const saved = localStorage.getItem("obvistyle_wardrobe");
     if (saved) setWardrobe(JSON.parse(saved));
   }, []);
 

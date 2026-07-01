@@ -238,7 +238,7 @@ function OutfitMatcher() {
              <div className="space-y-4">
                 <h2 className="text-4xl font-black italic tracking-tight">Unlock Photo Matching</h2>
                 <p className="text-xl text-gray-400 font-medium max-w-xl mx-auto leading-relaxed">
-                  Standalone photo upload "Does This Match?" is available exclusively in <span className="text-white font-black">TruHue Pro</span>.
+                  Standalone photo upload "Does This Match?" is available exclusively in <span className="text-white font-black">ObviStyle Pro</span>.
                 </p>
              </div>
              <div className="bg-white/10 backdrop-blur rounded-3xl p-8 max-w-sm mx-auto space-y-6 border border-white/10">
@@ -263,7 +263,7 @@ function OutfitMatcher() {
           <div className="absolute -left-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
           <h2 className="text-4xl font-black italic tracking-tight">Shopping in Person?</h2>
           <p className="text-xl text-indigo-100 font-medium max-w-2xl mx-auto leading-relaxed">
-            Use the text-based matcher to verify colors with store associates, or take a quick photo with TruHue Pro to get an instant AI decision.
+            Use the text-based matcher to verify colors with store associates, or take a quick photo with ObviStyle Pro to get an instant AI decision.
           </p>
         </div>
       </div>

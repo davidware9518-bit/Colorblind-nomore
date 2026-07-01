@@ -56,8 +56,8 @@ function Blog() {
     e.preventDefault();
     if (!email) return;
     setSubscribed(true);
-    const subscribers = JSON.parse(localStorage.getItem("truhue_subscribers") || "[]");
-    localStorage.setItem("truhue_subscribers", JSON.stringify([...subscribers, email]));
+    const subscribers = JSON.parse(localStorage.getItem("obvistyle_subscribers") || "[]");
+    localStorage.setItem("obvistyle_subscribers", JSON.stringify([...subscribers, email]));
     setEmail("");
   };
 
@@ -66,7 +66,7 @@ function Blog() {
       <div className="max-w-6xl mx-auto space-y-24">
         <div className="text-center space-y-6">
           <div className="inline-block px-4 py-1.5 bg-indigo-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest">
-            TruHue Journal
+            ObviStyle Journal
           </div>
           <h1 className="text-6xl font-black text-gray-900 tracking-tight leading-none italic">Style Insights.</h1>
           <p className="text-xl text-gray-500 font-medium max-w-xl mx-auto">
@@ -106,7 +106,7 @@ function Blog() {
               <div className="space-y-4 animate-in fade-in zoom-in duration-500">
                 <div className="text-6xl">🎉</div>
                 <h2 className="text-4xl font-black italic">You're on the list!</h2>
-                <p className="text-xl text-indigo-100 font-medium">Thank you for joining the TruHue community.</p>
+                <p className="text-xl text-indigo-100 font-medium">Thank you for joining the ObviStyle community.</p>
               </div>
             ) : (
               <>

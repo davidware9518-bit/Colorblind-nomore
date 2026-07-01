@@ -20,7 +20,10 @@ function Home() {
                 <span className="text-indigo-600">Clothes Match.</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 font-medium leading-relaxed max-w-3xl mx-auto">
-                An AI wardrobe assistant built for colorblind people. Tell us what you own, get color-safe outfit combinations, and know what to buy next.
+                An AI wardrobe assistant. Whether you're colorblind or just want more style confidence, tell us what you own and get outfit combinations that work.
+              </p>
+              <p className="text-lg text-indigo-500 font-black uppercase tracking-widest pt-4 italic">
+                Making the obvious obvious.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -51,7 +54,7 @@ function Home() {
             <div className="max-w-3xl mx-auto text-center space-y-8">
               <h2 className="text-4xl md:text-5xl font-black tracking-tight">Getting dressed should not <br/> feel like guessing.</h2>
               <p className="text-xl text-gray-500 font-medium leading-relaxed">
-                For millions of colorblind individuals, choosing an outfit is a daily exercise in uncertainty. TruHue removes the guesswork by using accessibility-first AI to analyze your closet based on how YOU see the world.
+                For millions of colorblind individuals, choosing an outfit is a daily exercise in uncertainty. ObviStyle removes the guesswork by using accessibility-first AI to analyze your closet based on how YOU see the world.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
                 <div className="space-y-4">
@@ -105,7 +108,7 @@ function Home() {
               <div className="flex-1 space-y-4">
                 <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">No camera? <br/> No problem.</h2>
                 <p className="text-xl text-indigo-100 font-medium max-w-md">
-                  Digitize your closet in seconds. Just type what you own, and TruHue does the heavy lifting.
+                  Digitize your closet in seconds. Just type what you own, and ObviStyle does the heavy lifting.
                 </p>
               </div>
               <div className="flex-1 w-full max-w-xl">

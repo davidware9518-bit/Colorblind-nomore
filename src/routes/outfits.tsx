@@ -43,16 +43,16 @@ function Outfits() {
   const [showSaved, setShowSaved] = useState(false);
 
   useEffect(() => {
-    const savedWardrobe = localStorage.getItem("truhue_wardrobe");
+    const savedWardrobe = localStorage.getItem("obvistyle_wardrobe");
     if (savedWardrobe) setWardrobe(JSON.parse(savedWardrobe));
 
-    const profile = localStorage.getItem("truhue_style_profile");
+    const profile = localStorage.getItem("obvistyle_style_profile");
     if (profile) {
       const parsed = JSON.parse(profile);
       setVisionType(parsed.vision_type || "unknown");
     }
 
-    const saved = localStorage.getItem("truhue_saved_outfits");
+    const saved = localStorage.getItem("obvistyle_saved_outfits");
     if (saved) setSavedOutfits(JSON.parse(saved));
   }, []);
 
@@ -60,13 +60,13 @@ function Outfits() {
     if (savedOutfits.some(o => o.id === outfit.id)) return;
     const newSaved = [outfit, ...savedOutfits];
     setSavedOutfits(newSaved);
-    localStorage.setItem("truhue_saved_outfits", JSON.stringify(newSaved));
+    localStorage.setItem("obvistyle_saved_outfits", JSON.stringify(newSaved));
   };
 
   const removeOutfit = (id: string) => {
     const newSaved = savedOutfits.filter(o => o.id !== id);
     setSavedOutfits(newSaved);
-    localStorage.setItem("truhue_saved_outfits", JSON.stringify(newSaved));
+    localStorage.setItem("obvistyle_saved_outfits", JSON.stringify(newSaved));
   };
 
   const generatedOutfits = useMemo(() => {

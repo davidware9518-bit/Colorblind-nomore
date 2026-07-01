@@ -57,12 +57,12 @@ function Wardrobe() {
     if (typeof window !== 'undefined' && (window as any).Capacitor?.isNative) {
       setIsNative(true);
     }
-    const saved = localStorage.getItem("truhue_wardrobe");
+    const saved = localStorage.getItem("obvistyle_wardrobe");
     if (saved) setItems(JSON.parse(saved));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("truhue_wardrobe", JSON.stringify(items));
+    localStorage.setItem("obvistyle_wardrobe", JSON.stringify(items));
   }, [items]);
 
   const parseText = (text: string) => {

@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.truhue.app',
-  appName: 'TruHue',
+  appName: 'ClosetClarity',
   webDir: 'dist/client'
 };
 

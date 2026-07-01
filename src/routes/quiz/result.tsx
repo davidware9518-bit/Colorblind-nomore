@@ -9,7 +9,7 @@ function QuizResult() {
   const [results, setResults] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
-    const data = localStorage.getItem("truhue_style_profile");
+    const data = localStorage.getItem("obvistyle_style_profile");
     if (data) {
       setResults(JSON.parse(data));
     }

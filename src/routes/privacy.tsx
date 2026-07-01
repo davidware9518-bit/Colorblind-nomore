@@ -16,7 +16,7 @@ function Privacy() {
             Your data, your closet.
           </h1>
           <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto">
-            At TruHue, we believe your personal style and wardrobe data belong to you.
+            At ObviStyle, we believe your personal style and wardrobe data belong to you.
           </p>
         </div>
 

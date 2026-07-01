@@ -16,7 +16,7 @@ function About() {
             Style for Everyone.
           </h1>
           <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto">
-            TruHue was founded with a simple goal: to help the 300 million colorblind people worldwide dress with absolute confidence.
+            ObviStyle was founded with a simple goal: to help the 300 million colorblind people worldwide dress with absolute confidence.
           </p>
         </div>
 
@@ -25,7 +25,7 @@ function About() {
             For many, choosing an outfit is a mindless daily routine. But for those with color vision deficiency, it can be a source of stress, uncertainty, and constant second-guessing.
           </p>
           <p>
-            TruHue uses accessibility-first technology to bridge the gap between color perception and style. We believe that style is a form of self-expression that shouldn't be limited by how you see the visible spectrum.
+            ObviStyle uses accessibility-first technology to bridge the gap between color perception and style. We believe that style is a form of self-expression that shouldn't be limited by how you see the visible spectrum.
           </p>
           
           <div className="bg-gray-50 p-10 rounded-[3rem] border border-gray-100 not-prose space-y-6">

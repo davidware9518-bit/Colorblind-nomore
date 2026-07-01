@@ -15,7 +15,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TruHue — Accessible Style" },
+      { title: "ObviStyle — Making the obvious obvious" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -26,11 +26,14 @@ export const Route = createRootRoute({
 function Header() {
   return (
     <header className="px-6 h-20 flex items-center justify-between border-b border-gray-100 sticky top-0 bg-white/80 backdrop-blur-md z-50">
-      <Link className="flex items-center gap-2 group" to="/">
+      <Link className="flex items-center gap-3 group" to="/">
         <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform">
-          <span className="text-white font-black text-2xl">T</span>
+          <span className="text-white font-black text-2xl">O</span>
         </div>
-        <span className="font-black text-2xl tracking-tighter text-gray-900">TruHue</span>
+        <div className="flex flex-col">
+          <span className="font-black text-2xl tracking-tighter text-gray-900 leading-none">ObviStyle</span>
+          <span className="text-[8px] font-black uppercase tracking-[0.2em] text-indigo-600">Making the obvious obvious</span>
+        </div>
       </Link>
       <nav className="hidden md:flex gap-8">
         <Link className="text-sm font-bold text-gray-600 hover:text-indigo-600 transition-colors" to="/quiz">
@@ -67,9 +70,9 @@ function Footer() {
           <div className="space-y-6">
             <Link className="flex items-center gap-2 group" to="/">
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-black text-xl">T</span>
+                <span className="text-white font-black text-xl">O</span>
               </div>
-              <span className="font-black text-xl tracking-tighter">TruHue</span>
+              <span className="font-black text-xl tracking-tighter">ObviStyle</span>
             </Link>
             <p className="text-gray-400 font-medium">
               Mastering style for the colorblind community.
@@ -109,7 +112,7 @@ function Footer() {
         </div>
         
         <div className="pt-10 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-6 text-sm font-bold text-gray-500">
-          <p>© 2026 TruHue. All rights reserved.</p>
+          <p>© 2026 ObviStyle. All rights reserved.</p>
           <div className="flex gap-8">
             <Link to="/" className="hover:text-white">Twitter</Link>
             <Link to="/" className="hover:text-white">Instagram</Link>

@@ -84,12 +84,12 @@ function Recommendations() {
   const [wardrobe, setWardrobe] = useState<any[]>([]);
 
   useEffect(() => {
-    const profile = localStorage.getItem("truhue_style_profile");
+    const profile = localStorage.getItem("obvistyle_style_profile");
     if (profile) {
       const parsed = JSON.parse(profile);
       setVisionType(parsed.vision_type || "unknown");
     }
-    const saved = localStorage.getItem("truhue_wardrobe");
+    const saved = localStorage.getItem("obvistyle_wardrobe");
     if (saved) setWardrobe(JSON.parse(saved));
   }, []);
 
